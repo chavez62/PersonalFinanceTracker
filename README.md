@@ -88,7 +88,7 @@ Contributions are welcome! If you have any ideas, suggestions, or bug reports, p
     git push origin feature/YourFeatureName
     ```
 
-5. **Screenshot**.
+**Screenshot**.
  ![image](https://github.com/user-attachments/assets/6316d1f9-896e-41bd-902b-836e0139e998)
 
 
