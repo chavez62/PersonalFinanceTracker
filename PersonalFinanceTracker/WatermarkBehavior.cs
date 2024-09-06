@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace PersonalFinanceTracker.Behaviors
 {
@@ -26,26 +27,34 @@ namespace PersonalFinanceTracker.Behaviors
         {
             if (d is TextBox textBox)
             {
-                textBox.GotFocus += (sender, args) =>
-                {
-                    if (textBox.Text == GetWatermark(textBox))
-                    {
-                        textBox.Text = "";
-                        textBox.Foreground = System.Windows.Media.Brushes.Black;
-                    }
-                };
+                // Detach previous event handlers
+                textBox.GotFocus -= RemoveWatermark;
+                textBox.LostFocus -= ApplyWatermark;
 
-                textBox.LostFocus += (sender, args) =>
-                {
-                    if (string.IsNullOrWhiteSpace(textBox.Text))
-                    {
-                        textBox.Text = GetWatermark(textBox);
-                        textBox.Foreground = System.Windows.Media.Brushes.Gray;
-                    }
-                };
+                // Attach event handlers
+                textBox.GotFocus += RemoveWatermark;
+                textBox.LostFocus += ApplyWatermark;
 
+                // Apply watermark initially
+                ApplyWatermark(textBox, null);
+            }
+        }
+
+        private static void RemoveWatermark(object sender, RoutedEventArgs e)
+        {
+            if (sender is TextBox textBox && textBox.Text == GetWatermark(textBox))
+            {
+                textBox.Text = string.Empty;
+                textBox.Foreground = Brushes.Black; // Reset to normal text color
+            }
+        }
+
+        private static void ApplyWatermark(object sender, RoutedEventArgs e)
+        {
+            if (sender is TextBox textBox && string.IsNullOrWhiteSpace(textBox.Text))
+            {
                 textBox.Text = GetWatermark(textBox);
-                textBox.Foreground = System.Windows.Media.Brushes.Gray;
+                textBox.Foreground = Brushes.Gray; // Watermark color
             }
         }
     }
